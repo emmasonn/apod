@@ -27,9 +27,12 @@ class JournalCard extends StatelessWidget {
           journal.body,
           style: GoogleFonts.lato(fontSize: 18),
         ),
+        const SizedBox(
+          height: 8.0,
+        ),
         Text(
           DateFormat('yyyy-MM-dd').format(journal.date),
-          style: GoogleFonts.lato(fontSize: 18),
+          style: GoogleFonts.lato(fontSize: 14),
         ),
       ]),
     );
