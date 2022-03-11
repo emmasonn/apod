@@ -15,26 +15,62 @@ class JournalScreen extends StatefulWidget {
 class _JournalScreenState extends State<JournalScreen> {
   @override
   Widget build(BuildContext context) {
+    final manager = Provider.of<JournalManager>(context, listen: false);
+
     return Scaffold(
       body: Consumer<JournalManager>(builder: (context, journalManager, child) {
         final entries = journalManager.getEntries();
-        return ListView.builder(
+        return ListView.separated(
           itemCount: entries.length,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddJournalEntry(
-                      entry: entries[index],
-                      onSave: (item) {
-                        Provider.of<JournalManager>(context, listen: false)
-                            .addItem(item);
-                        Navigator.pop(context);
-                      }),
+            final item = entries[index];
+            return Builder(builder: (context) {
+              return Dismissible(
+                key: Key(item.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  child: const Icon(
+                    Icons.delete_forever,
+                    color: Colors.white,
+                    size: 50.0,
+                  ),
                 ),
-              ),
-              child: JournalCard(journal: entries[index]),
+                onDismissed: (direction) {
+                  manager.deleteItem(index);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${item.title} dismissed'),
+                    ),
+                  );
+                },
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddJournalEntry(
+                          entry: item,
+                          onCreate: (newItem) {},
+                          onUpdate: (newItem) {
+                            print('updateditem: $newItem');
+                            manager.updateItem(newItem, index);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  child: JournalCard(key: Key(item.id), journal: item),
+                ),
+              );
+            });
+          },
+          separatorBuilder: (context, index) {
+            return const Divider(
+              thickness: 0.5,
+              color: Colors.black54,
             );
           },
         );
@@ -44,11 +80,13 @@ class _JournalScreenState extends State<JournalScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddJournalEntry(onSave: (item) {
-                Provider.of<JournalManager>(context, listen: false)
-                    .addItem(item);
-                Navigator.pop(context);
-              }),
+              builder: (context) => AddJournalEntry(
+                onCreate: (item) {
+                  manager.addItem(item);
+                  Navigator.pop(context);
+                },
+                onUpdate: (item) {},
+              ),
             ),
           );
         },
