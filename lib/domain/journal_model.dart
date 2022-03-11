@@ -18,4 +18,8 @@ class Journal {
           title: title ?? this.title,
           body: body ?? this.body,
           date: date ?? this.date);
+
+  @override
+  String toString() =>
+      "Journal( id: $id, title: $title, body: $body, date: $date,";
 }
