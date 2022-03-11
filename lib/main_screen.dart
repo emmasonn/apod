@@ -1,0 +1,70 @@
+import 'package:apod/ui/apod_page.dart';
+import 'package:apod/ui/favorite_page.dart';
+import 'package:apod/ui/journalPage.dart';
+import 'package:apod/ui/recent_page.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'provider_model/tab_manager.dart';
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key, required this.title}) : super(key: key);
+  final String title;
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  final pages = <Widget>[
+    const ApodsPage(),
+    const RecentPage(),
+    const FavoritePage(),
+    const JournalPage()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<TabManager>(
+      builder: (context, tabManager, child) {
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              widget.title,
+            ),
+          ),
+          body: SafeArea(
+            child: IndexedStack(
+              index: tabManager.selectedTab,
+              children: pages,
+            ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: Theme.of(context).colorScheme.secondary,
+            currentIndex: tabManager.selectedTab,
+            onTap: tabManager.goToPage,
+            type: BottomNavigationBarType.fixed,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.photo),
+                label: 'Apod',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today),
+                label: 'Recent',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                label: 'Favorite',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.bookmark),
+                label: 'Journal',
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

@@ -1,8 +1,9 @@
-import 'package:apod/styles/apod_theme.dart';
+import 'package:apod/provider_model/journal_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider_model/tab_manager.dart';
+import 'AddJournalEntry.dart';
 
 class EmptyJournalList extends StatefulWidget {
   const EmptyJournalList({Key? key}) : super(key: key);
@@ -17,10 +18,23 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddJournalEntry(
+                onSave: (item) {
+                  Provider.of<JournalManager>(context, listen: false)
+                      .addItem(item);
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          );
+        },
         child: const Icon(
-          Icons.edit,
-          color: Colors.white,
+          Icons.add,
+          // color: Colors.white,
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
       ),
@@ -59,7 +73,7 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
               onPressed: () {
                 Provider.of<TabManager>(context, listen: false).goToRecent();
               },
-              padding: const EdgeInsets.all(20.0),
+              // padding: const EdgeInsets.all(20.0),
               child: const Text(
                 'Browse Apods',
               ),

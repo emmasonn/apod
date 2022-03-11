@@ -27,7 +27,7 @@ class MockApodService {
     await Future.delayed(
       const Duration(milliseconds: 1000),
     );
-    final dataString = await _loadString('assets/json_files/');
+    final dataString = await _loadString('assets/json_files/recent.json');
     final apodList = json.decode(dataString);
     List<Apod> apods = [];
     apodList.forEach((e) => apods.add(Apod.fromJson(e)));
