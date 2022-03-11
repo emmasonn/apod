@@ -16,6 +16,8 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final tabManager = Provider.of<TabManager>(context, listen: false);
+    final journalManager = Provider.of<JournalManager>(context, listen: false);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -23,11 +25,11 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
             context,
             MaterialPageRoute(
               builder: (context) => AddJournalEntry(
-                onSave: (item) {
-                  Provider.of<JournalManager>(context, listen: false)
-                      .addItem(item);
+                onCreate: (item) {
+                  journalManager.addItem(item);
                   Navigator.pop(context);
                 },
+                onUpdate: (item) {},
               ),
             ),
           );
@@ -71,7 +73,7 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
           Center(
             child: MaterialButton(
               onPressed: () {
-                Provider.of<TabManager>(context, listen: false).goToRecent();
+                tabManager.goToRecent();
               },
               // padding: const EdgeInsets.all(20.0),
               child: const Text(
