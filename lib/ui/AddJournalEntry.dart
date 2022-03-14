@@ -25,6 +25,21 @@ class AddJournalEntry extends StatefulWidget {
 
   @override
   State<AddJournalEntry> createState() => _AddJournalEntryState();
+
+  static Page page(
+      {LocalKey? key,
+      Journal? entry,
+      Function(Journal)? onCreate,
+      Function(Journal)? upDate}) {
+    return MaterialPage<void>(
+      key: key,
+      child: AddJournalEntry(
+        entry: entry,
+        onCreate: onCreate,
+        onUpdate: onUpdate,
+      ),
+    );
+  }
 }
 
 class _AddJournalEntryState extends State<AddJournalEntry> {
@@ -33,8 +48,6 @@ class _AddJournalEntryState extends State<AddJournalEntry> {
   late DateTime? date;
   late Journal entry;
   late Color _currentColor;
-  String? _title;
-  String? _body;
 
   @override
   void initState() {
