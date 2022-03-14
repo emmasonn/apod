@@ -1,8 +1,15 @@
 import 'package:apod/styles/illustration.dart';
 import 'package:flutter/material.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class SplashPage extends StatelessWidget {
+  const SplashPage({Key? key}) : super(key: key);
+
+  static Page page({LocalKey? key}) {
+    return MaterialPage<void>(
+      key: key,
+      child: const SplashPage(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,7 @@ class SplashScreen extends StatelessWidget {
           Text(
             'Initializing...',
             style: Theme.of(context).textTheme.headline3,
-          )
+          ),
         ],
       )),
     );
