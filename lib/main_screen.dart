@@ -1,3 +1,4 @@
+import 'package:apod/provider_model/app_state_manager.dart';
 import 'package:apod/ui/apod_page.dart';
 import 'package:apod/ui/favorite_page.dart';
 import 'package:apod/ui/journalPage.dart';
@@ -32,8 +33,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TabManager>(
-      builder: (context, tabManager, child) {
+    return Consumer<AppStateManager>(
+      builder: (context, appStateManager, child) {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -43,14 +44,14 @@ class _MainScreenState extends State<MainScreen> {
           ),
           body: SafeArea(
             child: IndexedStack(
-              index: tabManager.selectedTab,
+              index: appStateManager.selectedTab,
               children: pages,
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: Theme.of(context).colorScheme.secondary,
-            currentIndex: tabManager.selectedTab,
-            onTap: tabManager.goToPage,
+            currentIndex: appStateManager.selectedTab,
+            onTap: appStateManager.goToPage,
             type: BottomNavigationBarType.fixed,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(

@@ -13,30 +13,27 @@ class AddJournalEntry extends StatefulWidget {
   const AddJournalEntry({
     Key? key,
     this.entry,
-    required this.onCreate,
-    required this.onUpdate,
+    required this.onSave,
   })  : isUpdating = (entry != null),
         super(key: key);
 
   final Journal? entry;
-  final Function(Journal) onCreate;
-  final Function(Journal) onUpdate;
+  final Function(Journal) onSave;
   final bool isUpdating;
 
   @override
   State<AddJournalEntry> createState() => _AddJournalEntryState();
 
-  static Page page(
-      {LocalKey? key,
-      Journal? entry,
-      Function(Journal)? onCreate,
-      Function(Journal)? upDate}) {
+  static Page page({
+    LocalKey? key,
+    Journal? entry,
+    Function(Journal)? onSave,
+  }) {
     return MaterialPage<void>(
       key: key,
       child: AddJournalEntry(
         entry: entry,
-        onCreate: onCreate,
-        onUpdate: onUpdate,
+        onSave: onSave!,
       ),
     );
   }
@@ -85,10 +82,11 @@ class _AddJournalEntryState extends State<AddJournalEntry> {
         date: widget.entry?.date ?? date!);
 
     if (widget.isUpdating) {
-      widget.onUpdate(entry);
+      widget.onSave(entry);
     } else {
-      widget.onCreate(entry);
+      widget.onSave(entry);
     }
+    Navigator.pop(context);
   }
 
   @override
@@ -226,7 +224,7 @@ class _AddJournalEntryState extends State<AddJournalEntry> {
                 ],
               ),
               Text(
-                (date == null) ? DateFormat('yyyy-MM-dd').format(date!) : '',
+                (date != null) ? DateFormat('yyyy-MM-dd').format(date!) : '',
                 style: GoogleFonts.lato(fontSize: 18),
               )
             ],
