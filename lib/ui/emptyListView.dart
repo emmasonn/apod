@@ -1,8 +1,9 @@
+import 'package:apod/provider_model/app_state_manager.dart';
 import 'package:apod/provider_model/journal_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../provider_model/tab_manager.dart';
 import 'AddJournalEntry.dart';
 
 class EmptyJournalList extends StatefulWidget {
@@ -16,24 +17,26 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final tabManager = Provider.of<TabManager>(context, listen: false);
+    final appStateManager =
+        Provider.of<AppStateManager>(context, listen: false);
     final journalManager = Provider.of<JournalManager>(context, listen: false);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddJournalEntry(
-                onCreate: (item) {
-                  journalManager.addItem(item);
-                  Navigator.pop(context);
-                },
-                onUpdate: (item) {},
-              ),
-            ),
-          );
-        },
+        onPressed: () => context.go('/journal/add'),
+        // {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => AddJournalEntry(
+        //         onCreate: (item) {
+        //           journalManager.addItem(item);
+        //           Navigator.pop(context);
+        //         },
+        //         onUpdate: (item) {},
+        //       ),
+        //     ),
+        //   );
+        // }
         child: const Icon(
           Icons.add,
           // color: Colors.white,
@@ -73,7 +76,7 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
           Center(
             child: MaterialButton(
               onPressed: () {
-                tabManager.goToRecent();
+                appStateManager.goToRecent();
               },
               // padding: const EdgeInsets.all(20.0),
               child: const Text(
@@ -91,32 +94,4 @@ class _EmptyJournalListState extends State<EmptyJournalList> {
       ),
     );
   }
-
-  // Widget centeredWidgets(BuildContext context) {
-  //   final size = MediaQuery.of(context).size;
-  //   return Center(
-  //     child: Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         SizedBox(
-  //           width: (size.width / 2),
-  //           child: AspectRatio(
-  //             aspectRatio: 16 / 9,
-  //             child: Image.asset(
-  //                 'assets/apod_images/2021-10-07-NGC6559Sartori1024.jpeg'),
-  //           ),
-  //         ),
-  //         SizedBox(
-  //           height: (size.height / 30),
-  //         ),
-  //         Text(
-  //           'No Journal Entries',
-  //           textAlign: TextAlign.center,
-  //           style: Theme.of(context).textTheme.headline2,
-  //         ),
-  //         SizedBox(height: size.height / 30),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

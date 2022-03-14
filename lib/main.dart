@@ -1,11 +1,13 @@
 import 'package:apod/main_screen.dart';
+import 'package:apod/provider_model/app_state_manager.dart';
 import 'package:apod/provider_model/journal_manager.dart';
-import 'package:apod/provider_model/tab_manager.dart';
+import 'package:apod/router/go_router.dart';
 import 'package:apod/styles/apod_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  appStateManager.initialized();
   runApp(const ApodApp());
 }
 
@@ -17,17 +19,16 @@ class ApodApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => TabManager()),
+        ChangeNotifierProvider(create: (context) => appStateManager),
         ChangeNotifierProvider(create: (context) => JournalManager())
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Nasal Apod',
         theme: ApodTheme.light(),
         darkTheme: ApodTheme.dark(),
         debugShowCheckedModeBanner: false,
-        home: const MainScreen(title: 'Apod'),
-        // home: ApodThumbnail(apod: SampleData.apods[0]),
-        // home: SplashScreen()
+        routerDelegate: goRouter.routerDelegate,
+        routeInformationParser: goRouter.routeInformationParser,
       ),
     );
   }

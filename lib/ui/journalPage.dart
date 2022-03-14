@@ -13,7 +13,7 @@ class JournalPage extends StatelessWidget {
     return Scaffold(
       body: Consumer<JournalManager>(
         builder: (context, journalManager, child) {
-          return (journalManager.getEntries().isEmpty)
+          return (journalManager.entries.isEmpty)
               ? const EmptyJournalList()
               : const JournalScreen();
         },

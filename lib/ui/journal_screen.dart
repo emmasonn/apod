@@ -1,6 +1,7 @@
 import 'package:apod/cards/journal_card.dart';
 import 'package:apod/provider_model/journal_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'AddJournalEntry.dart';
@@ -19,13 +20,14 @@ class _JournalScreenState extends State<JournalScreen> {
 
     return Scaffold(
       body: Consumer<JournalManager>(builder: (context, journalManager, child) {
-        final entries = journalManager.getEntries();
+        final entries = journalManager.entries;
         return ListView.separated(
           itemCount: entries.length,
           itemBuilder: (context, index) {
             final item = entries[index];
-            return Builder(builder: (context) {
-              return Dismissible(
+            return GestureDetector(
+              onTap: () => context.go('/journal/${item.id}'),
+              child: Dismissible(
                 key: Key(item.id),
                 direction: DismissDirection.endToStart,
                 background: Container(
@@ -38,34 +40,16 @@ class _JournalScreenState extends State<JournalScreen> {
                   ),
                 ),
                 onDismissed: (direction) {
-                  manager.deleteItem(index);
+                  manager.removeJournal(item);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('${item.title} dismissed'),
                     ),
                   );
                 },
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddJournalEntry(
-                          entry: item,
-                          onCreate: (newItem) {},
-                          onUpdate: (newItem) {
-                            print('updateditem: $newItem');
-                            manager.updateItem(newItem, index);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                  child: JournalCard(key: Key(item.id), journal: item),
-                ),
-              );
-            });
+                child: JournalCard(key: Key(item.id), journal: item),
+              ),
+            );
           },
           separatorBuilder: (context, index) {
             return const Divider(
@@ -76,20 +60,7 @@ class _JournalScreenState extends State<JournalScreen> {
         );
       }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddJournalEntry(
-                onCreate: (item) {
-                  manager.addItem(item);
-                  Navigator.pop(context);
-                },
-                onUpdate: (item) {},
-              ),
-            ),
-          );
-        },
+        onPressed: () => context.go('/journal/add'),
         child: const Icon(Icons.add),
       ),
     );
