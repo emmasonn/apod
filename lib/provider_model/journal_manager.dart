@@ -3,21 +3,28 @@ import 'package:flutter/material.dart';
 import '../domain/journal_model.dart';
 
 class JournalManager extends ChangeNotifier {
-  final List<Journal> _entries = [];
-  List<Journal> getEntries() => _entries;
+  List<Journal>? _sortedEntries = <Journal>[];
+  final Map<String, Journal> _byId = {};
 
-  void deleteItem(int index) {
-    _entries.removeAt(index);
+  List<Journal> get entries {
+    _sortedEntries ??= _byId.values.toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+    return List.unmodifiable(_sortedEntries!);
+  }
+
+  Journal getItem(index) {
+    return _byId[index]!;
+  }
+
+  void setItem(Journal journal) {
+    _byId[journal.id] = journal;
+    _sortedEntries = null;
     notifyListeners();
   }
 
-  void addItem(Journal item) {
-    _entries.add(item);
-    notifyListeners();
-  }
-
-  void updateItem(Journal item, int index) {
-    _entries[index] = item;
+  void removeJournal(Journal item) {
+    _byId.remove(item.id);
+    _sortedEntries = null;
     notifyListeners();
   }
 }
