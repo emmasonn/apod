@@ -2,6 +2,7 @@ import 'package:apod/ui/apod_page.dart';
 import 'package:apod/ui/favorite_page.dart';
 import 'package:apod/ui/journalPage.dart';
 import 'package:apod/ui/recent_page.dart';
+import 'package:apod/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,13 @@ class MainScreen extends StatefulWidget {
   final String title;
   @override
   State<MainScreen> createState() => _MainScreenState();
+
+  static Page page({LocalKey? key}) {
+    return MaterialPage<void>(
+      key: key,
+      child: const MainScreen(title: 'Apod'),
+    );
+  }
 }
 
 class _MainScreenState extends State<MainScreen> {
