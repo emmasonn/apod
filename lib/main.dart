@@ -2,11 +2,16 @@ import 'package:apod/main_screen.dart';
 import 'package:apod/provider_model/app_state_manager.dart';
 import 'package:apod/provider_model/journal_manager.dart';
 import 'package:apod/router/go_router.dart';
+import 'package:apod/source/repository.dart';
 import 'package:apod/styles/apod_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+late  sharedPref;
+late Repository apodRepository;
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   appStateManager.initialized();
   runApp(const ApodApp());
 }
