@@ -21,7 +21,7 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initialized() {
+  void initializedApp() {
     _initialized = true;
     notifyListeners();
   }
