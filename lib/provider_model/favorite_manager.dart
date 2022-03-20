@@ -1,14 +1,15 @@
+import 'package:apod/source/repository.dart';
 import 'package:apod/util/sharedPreference.dart';
 import 'package:flutter/widgets.dart';
 
 class FavoriteManager extends ChangeNotifier {
-  FavoriteManager(this._persistence) {
+  FavoriteManager(this._apodRepository) {
     _readFromPersistence();
   }
 
   final _storageKey = 'apod_favorites';
   final Set<int> _favoriteIds = <int>{};
-  final Persistence _persistence;
+  final Repository _apodRepository;
 
   void _addFavorite(int id) {
     _favoriteIds.add(id);
