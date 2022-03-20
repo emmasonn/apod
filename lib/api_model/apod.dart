@@ -1,4 +1,5 @@
 class Apod {
+  final int id;
   final DateTime? date;
   final MediaType mediaType;
   final String copyright;
@@ -9,6 +10,7 @@ class Apod {
   final String? videoUrl;
 
   const Apod({
+    required this.id,
     this.date,
     this.mediaType = MediaType.image,
     this.copyright = 'Public domain',
@@ -34,7 +36,7 @@ class Apod {
     final mediaType =
         json['media_type'] == 'image' ? MediaType.image : MediaType.video;
 
-    String? displayImageUrl;
+    String displayImageUrl = '';
     if (mediaType == MediaType.image) {
       displayImageUrl = json['url'];
     } else {
@@ -51,6 +53,7 @@ class Apod {
     final String copyright = json['copyright'] ?? 'Public domain';
 
     return Apod(
+      id: json['id'],
       date: date,
       mediaType: mediaType,
       copyright: copyright,
