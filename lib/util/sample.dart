@@ -5,6 +5,7 @@ import '../api_model/apod.dart';
 class SampleData {
   static final apods = <Apod>[
     Apod(
+        id: 1,
         copyright: "Ignacio Diaz Bobillo",
         date: DateTime(2022, 05, 20),
         explanation:
