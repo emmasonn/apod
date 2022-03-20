@@ -1,6 +1,7 @@
 import 'package:apod/main_screen.dart';
 import 'package:apod/provider_model/journal_manager.dart';
 import 'package:apod/ui/AddJournalEntry.dart';
+import 'package:apod/ui/ApodDetail.dart';
 import 'package:apod/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,19 +23,18 @@ class Routes {
             key: state.pageKey,
           ),
       routes: [
-        addJournal,
+        apodDetail,
         editJournal,
       ]);
 
-  static final addJournal = GoRoute(
-      name: 'addJournal',
-      path: 'journal-add',
+  static final apodDetail = GoRoute(
+      name: 'apodDetail',
+      path: 'apod/:id',
       pageBuilder: (BuildContext context, GoRouterState state) {
-        final journalManager =
-            Provider.of<JournalManager>(context, listen: false);
-        return AddJournalEntry.page(
-          entry: null,
-          onSave: journalManager.setItem,
+        final argument = int.parse(state.params['id']!);
+        return ApodDetail.page(
+          key: state.pageKey,
+          apodId: argument,
         );
       });
 
