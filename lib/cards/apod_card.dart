@@ -21,12 +21,19 @@ class ApodCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Stack(children: [
-        _buildCardBackground(apod),
+        (apod.displayImageUrl != null)
+            ? _buildCardBackground(apod)
+            : const Center(
+                child: Icon(
+                  Icons.play_circle,
+                  color: Colors.white,
+                ),
+              ),
         _buildTopOverlay(apod),
         Positioned(
           bottom: 0,
           child: _buildBottomOverlay(apod),
-        )
+        ),
       ]),
     );
   }
