@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class ApodTab {
@@ -22,13 +24,19 @@ class AppStateManager extends ChangeNotifier {
   }
 
   void initialized() {
-    _initialized = true;
-    notifyListeners();
+    Timer(const Duration(milliseconds: 2000), () {
+      _initialized = true;
+      notifyListeners();
+    });
   }
 
   void goToPage(int index) {
     _selectedTab = index;
     notifyListeners();
+  }
+
+  void setTabSilently(int index) {
+    _selectedTab = index;
   }
 
   void goToRecent() {
