@@ -7,12 +7,11 @@ import 'package:apod/styles/apod_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-late  sharedPref;
 late Repository apodRepository;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  appStateManager.initialized();
+  appStateManager.initializedApp();
   runApp(const ApodApp());
 }
 
