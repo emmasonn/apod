@@ -11,11 +11,11 @@ class ApodDetail extends StatefulWidget {
     Key? key,
     required this.apodId,
   }) : super(key: key);
-  final int apodId;
+  final String apodId;
 
   static Page page({
     LocalKey? key,
-    int? apodId,
+    String? apodId,
   }) {
     return MaterialPage(
       key: key,

@@ -31,7 +31,7 @@ class Routes {
       name: 'apodDetail',
       path: 'apod/:id',
       pageBuilder: (BuildContext context, GoRouterState state) {
-        final argument = int.parse(state.params['id']!);
+        final argument = state.params['id']!;
         return ApodDetail.page(
           key: state.pageKey,
           apodId: argument,

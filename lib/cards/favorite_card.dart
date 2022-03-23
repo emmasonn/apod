@@ -28,7 +28,19 @@ class _FavoriteCardState extends State<FavoriteCard> {
   Widget build(BuildContext context) {
     return Center(
       child: Stack(children: [
-        _buildCardBackground(widget.apod),
+        (widget.apod.displayImageUrl != null)
+            ? _buildCardBackground(widget.apod)
+            : Container(
+                constraints: const BoxConstraints.expand(
+                  height: cardHeight,
+                  width: cardWidth,
+                ),
+                child: const Icon(
+                  Icons.play_circle_outline,
+                  size: 72.0,
+                  color: Colors.black54,
+                ),
+              ),
         _buildTopOverlay(widget.apod),
         Positioned(
           bottom: 0,
@@ -129,11 +141,17 @@ class _FavoriteCardState extends State<FavoriteCard> {
               },
               child: Consumer<FavoriteManager>(
                 builder: (context, favoriteModel, child) {
-                  return Icon(
-                    Icons.favorite,
-                    color: (favoriteModel.isFavorited(apod.id)
-                        ? Colors.red
-                        : Colors.white),
+                  return FutureBuilder<bool>(
+                    future: favoriteModel.isFavorited(apod.id),
+                    builder: (context, AsyncSnapshot<bool> snapshot) {
+                      final isSelected =
+                          !snapshot.hasData ? false : snapshot.data!;
+                      final color = isSelected ? Colors.red : Colors.white;
+                      return Icon(
+                        Icons.favorite,
+                        color: color,
+                      );
+                    },
                   );
                 },
               ),

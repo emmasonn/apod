@@ -1,45 +1,29 @@
 import 'package:apod/source/repository.dart';
-import 'package:apod/util/sharedPreference.dart';
 import 'package:flutter/widgets.dart';
 
+import '../api_model/apod.dart';
+
 class FavoriteManager extends ChangeNotifier {
-  FavoriteManager(this._apodRepository) {
-    _readFromPersistence();
-  }
+  FavoriteManager(this._apodRepository);
+  final Repository<Apod> _apodRepository;
 
-  final _storageKey = 'apod_favorites';
-  final Set<int> _favoriteIds = <int>{};
-  final Repository _apodRepository;
-
-  void _addFavorite(int id) {
-    _favoriteIds.add(id);
-    _syncToPersistence();
-    notifyListeners();
-  }
-
-  void _syncToPersistence() {
-    final _idsAsString =
-        _favoriteIds.map<String>((int id) => id.toString()).join(',');
-    _persistence.setKey(_storageKey, _idsAsString);
-  }
-
-  void _readFromPersistence() {
-    final String? idsAsString = _persistence.getKey(_storageKey);
-    if (idsAsString != null) {
-      _favoriteIds.addAll(idsAsString.split(',').map((e) => int.parse(e)));
+  Future<List<Apod>> getFavouriteApods() async {
+    final favApods = <Apod>[];
+    final favourites = await favoriteIds;
+    for (String id in favourites) {
+      var apod = (await _apodRepository.getItem(id))!;
+      favApods.add(apod);
     }
+    return favApods;
   }
 
-  void _removeFavorite(int id) {
-    _favoriteIds.remove(id);
-    _syncToPersistence();
+  Future<List<String>> get favoriteIds async =>
+      _apodRepository.getFavoriteIds();
+
+  Future<bool> isFavorited(String id) async => (await favoriteIds).contains(id);
+
+  void toggleFavorite(String id) {
+    _apodRepository.toggleFavorite(id);
     notifyListeners();
   }
-
-  void toggleFavorite(int id) =>
-      isFavorited(id) ? _removeFavorite(id) : _addFavorite(id);
-
-  Set<int> get favoriteIds => _favoriteIds;
-
-  bool isFavorited(int id) => favoriteIds.contains(id);
 }
