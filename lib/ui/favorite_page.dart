@@ -16,12 +16,10 @@ class FavoritePage extends StatefulWidget {
 class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    final apodService = MockApodService();
     return Consumer<FavoriteManager>(
         builder: (context, favoriteManager, child) {
       return FutureBuilder(
-          future:
-              apodService.getFavoriteApod(favoriteManager.favoriteIds.toList()),
+          future: favoriteManager.getFavouriteApods(),
           builder: (context, AsyncSnapshot<List<Apod>> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               List<Apod> apods = snapshot.data ?? [];
