@@ -1,20 +1,34 @@
-import 'package:apod/main_screen.dart';
-import 'package:apod/provider_model/app_state_manager.dart';
-import 'package:apod/provider_model/favorite_manager.dart';
-import 'package:apod/provider_model/journal_manager.dart';
+import 'package:apod/api/mock_service.dart';
+import 'package:apod/api_model/apod.dart';
+import 'package:apod/provider_model/manager_model.dart';
 import 'package:apod/router/go_router.dart';
+import 'package:apod/source/source_model.dart';
 import 'package:apod/styles/apod_theme.dart';
-import 'package:apod/util/sharedPreference.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-late SharedPreferences sharedPrefs;
+// late SharedPreferences sharedPref;
+late Repository<Apod> apodRepository;
+
 void main() async {
-  //this is required when you want to access platform channels.
   WidgetsFlutterBinding.ensureInitialized();
-  appStateManager.initialized();
-  sharedPrefs = await SharedPreferences.getInstance();
+  appStateManager.initializedApp();
+
+  Hive.initFlutter();
+  final apodHive = LocalPersistenceSource(
+    fromJson: (Map<String, dynamic> json) => Apod.fromJson(json),
+    toJson: (Apod obj) => obj.toJson(),
+  );
+
+  await apodHive.ready();
+
+  // sharedPref = await SharedPreferences.getInstance();
+  apodRepository = Repository<Apod>(
+    sourceList: [LocalMemorySource<Apod>(), apodHive],
+  );
+  final apodService = MockApodService();
+  (await apodService.getRecent()).forEach(apodRepository.setItem);
   runApp(const ApodApp());
 }
 
@@ -26,10 +40,9 @@ class ApodApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => appStateManager),
+        ChangeNotifierProvider.value(value: appStateManager),
         ChangeNotifierProvider(
-            create: (context) =>
-                FavoriteManager(SharedPreferencePersistence(sharedPrefs))),
+            create: (context) => FavoriteManager(apodRepository)),
         ChangeNotifierProvider(create: (context) => JournalManager())
       ],
       child: MaterialApp.router(
