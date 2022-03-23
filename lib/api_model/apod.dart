@@ -1,5 +1,6 @@
-class Apod {
-  final int id;
+import 'package:apod/source/data_contract.dart';
+
+class Apod extends DataModel {
   final DateTime? date;
   final MediaType mediaType;
   final String copyright;
@@ -10,7 +11,7 @@ class Apod {
   final String? videoUrl;
 
   const Apod({
-    required this.id,
+    required id,
     this.date,
     this.mediaType = MediaType.image,
     this.copyright = 'Public domain',
@@ -19,7 +20,7 @@ class Apod {
     this.displayImageUrl = '',
     this.hdUrl,
     this.videoUrl,
-  });
+  }) : super(id: id);
 
   factory Apod.fromJson(Map<String, dynamic> json) {
     final String dateString = json['date'];
@@ -36,7 +37,7 @@ class Apod {
     final mediaType =
         json['media_type'] == 'image' ? MediaType.image : MediaType.video;
 
-    String displayImageUrl = '';
+    String? displayImageUrl;
     if (mediaType == MediaType.image) {
       displayImageUrl = json['url'];
     } else {
@@ -64,6 +65,18 @@ class Apod {
       videoUrl: videoUrl,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "date": "$date",
+        "mediaType": mediaType,
+        "copyright": copyright,
+        "title": title,
+        "explanation": explanation,
+        "displayImageUrl": displayImageUrl,
+        "hdUrl": hdUrl,
+        "videoUrl": videoUrl
+      };
 }
 
 enum MediaType {

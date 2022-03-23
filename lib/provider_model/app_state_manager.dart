@@ -23,7 +23,7 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initialized() {
+  void initializedApp() {
     Timer(const Duration(milliseconds: 2000), () {
       _initialized = true;
       notifyListeners();

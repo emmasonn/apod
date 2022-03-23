@@ -23,10 +23,13 @@ class ApodCard extends StatelessWidget {
       child: Stack(children: [
         (apod.displayImageUrl != null)
             ? _buildCardBackground(apod)
-            : const Center(
-                child: Icon(
+            : Container(
+                constraints: const BoxConstraints.expand(
+                    height: cardHeight, width: cardWidth),
+                child: const Icon(
                   Icons.play_circle,
-                  color: Colors.white,
+                  size: 72,
+                  color: Colors.black54,
                 ),
               ),
         _buildTopOverlay(apod),

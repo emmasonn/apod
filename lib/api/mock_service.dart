@@ -14,7 +14,7 @@ class MockApodService {
     return apods;
   }
 
-  Future<List<Apod>> getFavoriteApod(List<int> favoriteIds) async {
+  Future<List<Apod>> getFavoriteApod(List<String> favoriteIds) async {
     final apods = _getFavoriteApod(favoriteIds);
     return apods;
   }
@@ -28,16 +28,16 @@ class MockApodService {
     return favoriteApods;
   }
 
-  Future<List<Apod>> _getFavoriteApod(List<int> favoriteIds) async {
+  Future<List<Apod>> _getFavoriteApod(List<String> favoriteIds) async {
     final apods = await _getApods();
-    final recentApodIds = <int, Apod>{};
+    final recentApodIds = <String, Apod>{};
     for (final apod in apods) {
       recentApodIds[apod.id] = apod;
     }
     return favoriteIds.map<Apod>((id) => recentApodIds[id]!).toList();
   }
 
-  Future<Apod> getSingleApod(int apodId) async {
+  Future<Apod> getSingleApod(String apodId) async {
     final apodList = await getApods();
     return apodList.firstWhere((element) => element.id == apodId);
   }
